@@ -41,6 +41,13 @@ export type GitHubUserActivity = {
     totalCount: number;
   };
 };
+
+export type GitHubUserContributionsByYear = {
+  contributionsCollection: {
+    totalCommitContributions: number;
+    restrictedContributionsCount: number;
+  };
+};
 export class UserInfo {
   public readonly totalCommits: number;
   public readonly totalFollowers: number;
@@ -61,10 +68,13 @@ export class UserInfo {
     userIssue: GitHubUserIssue,
     userPullRequest: GitHubUserPullRequest,
     userRepository: GitHubUserRepository,
+    allTimeCommits?: number,
   ) {
-    const totalCommits =
-      userActivity.contributionsCollection.restrictedContributionsCount +
-      userActivity.contributionsCollection.totalCommitContributions;
+    // Use all-time commits if provided, otherwise fall back to last year's data
+    const totalCommits = allTimeCommits ??
+      (userActivity.contributionsCollection.restrictedContributionsCount +
+      userActivity.contributionsCollection.totalCommitContributions);
+
     const totalStargazers = userRepository.repositories.nodes.reduce(
       (prev: number, node: Repository) => {
         return prev + node.stargazers.totalCount;

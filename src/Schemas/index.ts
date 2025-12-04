@@ -17,6 +17,17 @@ export const queryUserActivity = `
     }
 `;
 
+export const queryUserContributionsByYear = `
+    query userInfo($username: String!, $from: DateTime!, $to: DateTime!) {
+      user(login: $username) {
+        contributionsCollection(from: $from, to: $to) {
+          totalCommitContributions
+          restrictedContributionsCount
+        }
+      }
+    }
+`;
+
 export const queryUserIssue = `
   query userInfo($username: String!) {
     user(login: $username) {
