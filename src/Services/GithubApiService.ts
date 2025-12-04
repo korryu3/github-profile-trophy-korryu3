@@ -1,6 +1,7 @@
 import { GithubRepository } from "../Repository/GithubRepository.ts";
 import {
   GitHubUserActivity,
+  GitHubUserContributionsByYear,
   GitHubUserIssue,
   GitHubUserPullRequest,
   GitHubUserRepository,
@@ -8,6 +9,7 @@ import {
 } from "../user_info.ts";
 import {
   queryUserActivity,
+  queryUserContributionsByYear,
   queryUserIssue,
   queryUserPullRequest,
   queryUserRepository,
@@ -38,6 +40,64 @@ export class GithubApiService extends GithubRepository {
     return await this.executeQuery<GitHubUserActivity>(queryUserActivity, {
       username,
     });
+  }
+
+  async requestUserContributionsByYear(
+    username: string,
+    from: string,
+    to: string,
+  ): Promise<GitHubUserContributionsByYear | ServiceError> {
+    return await this.executeQuery<GitHubUserContributionsByYear>(
+      queryUserContributionsByYear,
+      {
+        username,
+        from,
+        to,
+      },
+    );
+  }
+
+  async requestAllTimeCommits(username: string, createdAt: string): Promise<number> {
+    const accountCreationDate = new Date(createdAt);
+    const now = new Date();
+    let totalCommits = 0;
+
+    // Calculate years from account creation to now
+    const startYear = accountCreationDate.getFullYear();
+    const currentYear = now.getFullYear();
+
+    // Fetch contributions year by year
+    for (let year = startYear; year <= currentYear; year++) {
+      const fromDate = year === startYear
+        ? accountCreationDate.toISOString()
+        : new Date(year, 0, 1).toISOString();
+      
+      const toDate = year === currentYear
+        ? now.toISOString()
+        : new Date(year, 11, 31, 23, 59, 59).toISOString();
+
+      try {
+        const result = await this.requestUserContributionsByYear(
+          username,
+          fromDate,
+          toDate,
+        );
+
+        if (result instanceof ServiceError) {
+          Logger.error(`Failed to fetch contributions for year ${year}`);
+          continue;
+        }
+
+        const yearCommits = result.contributionsCollection.totalCommitContributions +
+          result.contributionsCollection.restrictedContributionsCount;
+        
+        totalCommits += yearCommits;
+      } catch (error) {
+        Logger.error(`Error fetching year ${year}: ${error}`);
+      }
+    }
+
+    return totalCommits;
   }
   async requestUserIssue(
     username: string,
@@ -77,11 +137,20 @@ export class GithubApiService extends GithubRepository {
         return new ServiceError("Not found", EServiceKindError.NOT_FOUND);
       }
 
+      const activityValue = (activity as PromiseFulfilledResult<GitHubUserActivity>).value;
+
+      // Fetch all-time commits
+      const allTimeCommits = await this.requestAllTimeCommits(
+        username,
+        activityValue.createdAt,
+      );
+
       return new UserInfo(
-        (activity as PromiseFulfilledResult<GitHubUserActivity>).value,
+        activityValue,
         (issue as PromiseFulfilledResult<GitHubUserIssue>).value,
         (pullRequest as PromiseFulfilledResult<GitHubUserPullRequest>).value,
         (repository as PromiseFulfilledResult<GitHubUserRepository>).value,
+        allTimeCommits,
       );
     } catch {
       Logger.error(`Error fetching user info for username: ${username}`);
