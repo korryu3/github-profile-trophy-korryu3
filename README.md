@@ -38,6 +38,19 @@
 > 1. Financial support: [GitHub Sponsors](https://github.com/sponsors/ryo-ma)
 > 2. Reducing server load through self-hosting (by forking on GitHub and
 >    deploying to Vercel)
+> 3. Share your github-profile-trophy URL deployed to Vercel for load balancing
+>    (Send email: saka_ro@yahoo.co.jp or Pull Request)
+
+# Load balancing endpoints
+
+These are endpoints provided by volunteers. Please use these in moderation.
+
+- [https://github-profile-trophy-liard-delta.vercel.app](https://github-profile-trophy-liard-delta.vercel.app/)
+  by [Adwitya](https://github.com/Adwitya)
+- [https://github-profile-trophy-fork-two.vercel.app](https://github-profile-trophy-fork-two.vercel.app)
+  by [hesreallyhim](https://github.com/hesreallyhim)
+- [https://github-profile-trophy-winning.vercel.app](https://github-profile-trophy-winning.vercel.app)
+  by [hongbo-wei](https://github.com/hongbo-wei)
 
 # Quick Start
 
@@ -567,6 +580,7 @@ contributions help keep development going and make this work possible.
 
 ## 💖 Monthly Sponsors
 
+- [@Leay15](https://github.com/Leay15) - $10 / month
 - [@hesreallyhim](https://github.com/hesreallyhim) - $10 / month
 - [@pmsosa](https://github.com/pmsosa) — $10 / month
 - [@chenfeng-huang](https://github.com/chenfeng-huang) — $10 / month
@@ -588,6 +602,10 @@ contributions help keep development going and make this work possible.
 
 ## 🎁 One-Time Sponsors
 
+- [@hesreallyhim](https://github.com/hesreallyhim) - $100 (Jan 11, 2026)
+- [@Seo-4d696b75](https://github.com/Seo-4d696b75) — $10 (Jan 4, 2026)
+- [@massif-01](https://github.com/massif-01) — $5 (December 17, 2025)
+- [@tapegram](https://github.com/tapegram) — $20 (December 6, 2025)
 - [@WilliamCorotan](https://github.com/WilliamCorotan) — $5 (November 5, 2025)
 - [@arnabnandy7](https://github.com/arnabnandy7) — $10 (Oct 3, 2025)
 - [@JoqarSabon](https://github.com/JoqarSabon) — $5 (May 24, 2024)
